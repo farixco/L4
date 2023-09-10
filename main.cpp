@@ -1,6 +1,7 @@
 #include <iostream>
 using std::cout;
 using std::endl;
+using std::cin;
 using std::getline;
 
 int mcd(int a, int b) {
@@ -49,7 +50,7 @@ char* reverseR(char* charAr, int length, int ndx = 0) {
       char hodl = charAr[ndx];
       charAr[ndx] = charAr[length - 1 - ndx];
       charAr[length - 1 - ndx] = hodl;
-      return reverseR(charAr, ndx + 1);
+      return reverseR(charAr, length, ndx + 1);
    }
 }
 
@@ -73,11 +74,84 @@ int fR(int n) {
 }
 
 int f(int n) {
-   int a = 1;
-   for (int i = 0; i < n; ++i) {
-      
+   if (n <= 1) {
+      return 1;
    }
+   int a = 1;
+   int b = 0;
+   int c = 1;
+   int d = a * b + c;
+   int reps = 0;
+   /*
+    * La función solo se puede replicar eficientemente utilizando es
+    * tructuras de datos. Esto es debido a que el cálculo de c recur
+    * sivo requiere de memoria más allá de la inmediata (a diferenci
+    * a de lo que sucede con a). Por esta razón, no se puede adaptar
+    * perfectamente a una estructura lineal con límites de memoria
+    * bien conocidos. Podría hacer el array lo suficientemente grand
+    * e para cualquier número de iteraciones pero no sé si está dent
+    * ro de los lineamientos del ejercicio añadir más argumentos.
+    */
+
+   // Me acabo de dar cuenta que igual supera el límite de int despu
+   // és de la 16va iteración, entonces tiene más que suficiente esp
+   // acio como para demostrar igualdad.
+   
+   int* aStorage = new int[100];
+   int nTmp = 1;
+   while (nTmp < n) {
+      aStorage[reps] = d;
+      if (reps % 2 == 0) {
+	 c = aStorage[b];
+	 ++b;
+      }
+      a = d;
+      d = a * b + c;
+      ++nTmp;
+      ++reps;
+   }
+   return d;
 }
+
 int main() {
+   std::string txt;
+   int n1, n2;
+   cout << "E1: Ingrese números de MCD." << endl;
+   getline(cin, txt);
+   n1 = std::stoi(txt);
+   getline(cin, txt);
+   n2 = std::stoi(txt);
+   cout << "MCD de " << n1 << " y " << n2 << ": " << mcd(n1, n2) << endl;
+   cout << "E2: ¿Qué tan largo quiere su arreglo?" << endl;
+   getline(cin, txt);
+   n2 = std::stoi(txt);
+   int* arNum = new int[n2];
+   for (int i = 0; i < n2; ++i) {
+      cout << "Ingrese el No. " << i << "." << endl;
+      getline(cin, txt);
+      arNum[i] = std::stoi(txt);
+   }
+   arNum = triangleSum(arNum, n2);
+   cout << "E3: Ingrese texto." << endl;
+   getline(cin, txt);
+   char* charAr = new char[txt.length()];
+   for (int i = 0; i < txt.length(); ++i) {
+      charAr[i] = txt[i];
+   }
+   charAr = reverseR(charAr, txt.length());
+   for (int i = 0; i < txt.length(); ++i) {
+      cout << charAr[i];
+   }
+   cout << endl;
+   cout << "E4: Ingrese un número para verificar si es primo o no." << endl;
+   getline(cin, txt);
+   n1 = std::stoi(txt);
+   cout << "¿Primo? " << prime(n1) << endl;
+   cout << "E5: Ingrese número de iteraciones para revisar." << endl;
+   getline(cin, txt);
+   n2 = std::stoi(txt);
+   for (int i = 0; i < n2; ++i) {
+      cout << i << ". It: " << f(i) << " Re: " << fR(i) << endl;
+   }
    return 0;
 }
