@@ -77,11 +77,9 @@ int f(int n) {
    if (n <= 1) {
       return 1;
    }
-   int a = 1;
    int b = 0;
    int c = 1;
-   int d = a * b + c;
-   int reps = 0;
+   int d = 1 * b + c;
    /*
     * La función solo se puede replicar eficientemente utilizando es
     * tructuras de datos. Esto es debido a que el cálculo de c recur
@@ -100,15 +98,13 @@ int f(int n) {
    int* aStorage = new int[100];
    int nTmp = 1;
    while (nTmp < n) {
-      aStorage[reps] = d;
-      if (reps % 2 == 0) {
+      aStorage[nTmp - 1] = d;
+      if ((nTmp - 1) % 2 == 0) {
 	 c = aStorage[b];
 	 ++b;
       }
-      a = d;
-      d = a * b + c;
+      d = aStorage[nTmp - 1] * b + c;
       ++nTmp;
-      ++reps;
    }
    return d;
 }
